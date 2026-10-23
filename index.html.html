@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="es-AR" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARTA GIM - Plataforma Fitness Femenina</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            pink: '#FF2A75',
+                            lightpink: '#FF6EA7',
+                            darkpink: '#D91258',
+                            black: '#0D0D0D',
+                            card: '#16161C',
+                            border: '#2A2A36'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-pink { background: linear-gradient(135deg, #FF2A75 0%, #D91258 100%); }
+        .gradient-text { background: linear-gradient(135deg, #FF6EA7 0%, #FF2A75 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .pink-glow { box-shadow: 0 0 25px rgba(255, 42, 117, 0.35); }
+        .pink-border-glow:focus { box-shadow: 0 0 15px rgba(255, 42, 117, 0.5); border-color: #FF2A75; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0D0D0D; }
+        ::-webkit-scrollbar-thumb { background: #2A2A36; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF2A75; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-brand-pink selection:text-white">
+
+    <!-- NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-brand-black/90 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" onclick="navigateTo('home')" class="flex flex-col items-start group">
+                <span class="text-2xl sm:text-3xl font-black tracking-wider text-white group-hover:text-brand-pink transition-colors">
+                    MARTA<span class="text-brand-pink">.</span>GIM
+                </span>
+                <span class="text-[9px] tracking-widest text-slate-400 font-semibold uppercase -mt-1">
+                    DISCIPLINA · FUERZA · LIBERTAD
+                </span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium">
+                <button onclick="navigateTo('home')" class="hover:text-brand-pink transition-colors">Inicio</button>
+                <button onclick="navigateTo('plan')" class="hover:text-brand-pink transition-colors">Membresía</button>
+                
+                <button onclick="checkAccessAndNavigate('routines')" class="hover:text-brand-pink transition-colors flex items-center space-x-1">
+                    <i class="fa-solid fa-dumbbell text-xs text-brand-pink"></i>
+                    <span>Rutinas Semanales</span>
+                </button>
+                <button onclick="checkAccessAndNavigate('library')" class="hover:text-brand-pink transition-colors flex items-center space-x-1">
+                    <i class="fa-solid fa-circle-play text-xs text-brand-pink"></i>
+                    <span>Biblioteca</span>
+                </button>
+                <button onclick="checkAccessAndNavigate('live')" class="hover:text-brand-pink transition-colors flex items-center space-x-1">
+                    <i class="fa-solid fa-video text-xs text-brand-pink"></i>
+                    <span>En Vivo</span>
+                </button>
+                <button onclick="navigateTo('contact')" class="hover:text-brand-pink transition-colors">Contacto</button>
+            </nav>
+
+            <!-- User Auth Controls -->
+            <div class="hidden lg:flex items-center space-x-3" id="authNavButtons">
+                <!-- Injected dynamically by JS -->
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-slate-300 hover:text-brand-pink text-2xl">
+                <i class="fa-solid fa-bars" id="menuIcon"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-brand-card border-b border-brand-border px-4 pt-3 pb-6 space-y-3">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-800">Inicio</button>
+            <button onclick="navigateTo('plan'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-800">Membresía</button>
+            <button onclick="checkAccessAndNavigate('routines'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-800 text-brand-pink font-semibold">
+                💪 Rutinas de Lunes a Viernes
+            </button>
+            <button onclick="checkAccessAndNavigate('library'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-800 text-brand-pink font-semibold">
+                🎥 Biblioteca de Clases
+            </button>
+            <button onclick="checkAccessAndNavigate('live'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-800 text-brand-pink font-semibold">
+                🔴 Clases En Vivo
+            </button>
+            <button onclick="navigateTo('contact'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-800">Contacto</button>
+            <div id="mobileAuthNav" class="pt-3 border-t border-brand-border space-y-2">
+                <!-- Dynamic mobile auth -->
+            </div>
+        </div>
+    </header>
+
+    <!-- NOTIFICATION ALERT BAR -->
+    <div id="globalNotification" class="hidden bg-brand-pink text-white text-sm font-semibold px-4 py-2 text-center relative">
+        <span id="globalNotificationText"></span>
+        <button onclick="closeNotification()" class="absolute right-4 top-2 text-white/80 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- MAIN DYNAMIC CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= PAGE 1: INICIO ================= -->
+        <section id="page-home" class="space-y-16">
+            <div class="relative rounded-3xl overflow-hidden bg-brand-card border border-brand-border p-8 lg:p-14 flex flex-col lg:flex-row items-center gap-12">
+                <div class="flex-1 space-y-6 text-center lg:text-left">
+                    <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-brand-pink/20 text-brand-pink border border-brand-pink/30">
+                        ⚡ ENTRENAMIENTO FEMENINO INTEGRAL
+                    </span>
+                    <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-none">
+                        TRANSFORMÁ TU CUERPO Y TU <span class="gradient-text">MENTE</span>
+                    </h1>
+                    <p class="text-slate-300 text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+                        Soy <strong>Marta Giménez</strong>. Diseñé este espacio para acompañarte a construir tu mejor versión diaria con disciplina, constancia y una comunidad que te impulsa siempre hacia adelante.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <button onclick="navigateTo('plan')" class="w-full sm:w-auto px-8 py-4 rounded-xl gradient-pink font-bold text-white shadow-lg pink-glow hover:opacity-95 transition-all text-center">
+                            Sumate a la Membresía Mensual
+                        </button>
+                        <button onclick="navigateTo('auth')" class="w-full sm:w-auto px-8 py-4 rounded-xl border border-brand-border hover:border-brand-pink bg-brand-black/50 font-semibold transition-all text-center">
+                            Ingresar a mi Cuenta
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-1 relative flex justify-center w-full">
+                    <div class="relative w-72 h-72 sm:w-96 sm:h-96 rounded-3xl overflow-hidden border-2 border-brand-pink/40 shadow-2xl bg-slate-900">
+                        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=800" 
+                             alt="Marta Giménez Entrenadora" 
+                             class="w-full h-full object-cover"
+                             onerror="this.src='https://placehold.co/800x800/16161C/FF2A75?text=MARTA+GIM'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 bg-brand-card/90 backdrop-blur border border-brand-border p-3 rounded-xl text-center">
+                            <p class="text-xs font-bold text-brand-lightpink">MARTA GIMÉNEZ</p>
+                            <p class="text-[11px] text-slate-400">Head Coach & Creadora de MARTA GIM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <h2 class="text-3xl font-black">NUESTRO MÉTODO</h2>
+                    <p class="text-slate-400">Entrenamientos estructurados de Lunes a Viernes para lograr resultados reales y sostenibles.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border space-y-4 hover:border-brand-pink/50 transition-colors">
+                        <div class="w-12 h-12 rounded-xl bg-brand-pink/10 text-brand-pink flex items-center justify-center text-2xl font-bold">01</div>
+                        <h3 class="text-xl font-bold">Rutinas Diarias Grabadas</h3>
+                        <p class="text-slate-400 text-sm">Clases organizadas de Lunes a Viernes con foco progresivo en fuerza, hipertrofia, glúteos, piernas y cardio intenso.</p>
+                    </div>
+                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border space-y-4 hover:border-brand-pink/50 transition-colors">
+                        <div class="w-12 h-12 rounded-xl bg-brand-pink/10 text-brand-pink flex items-center justify-center text-2xl font-bold">02</div>
+                        <h3 class="text-xl font-bold">Encuentros En Vivo</h3>
+                        <p class="text-slate-400 text-sm">Clases en vivo semanales por Zoom/Meet para corregir técnica, motivarnos en tiempo real y despejar dudas.</p>
+                    </div>
+                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border space-y-4 hover:border-brand-pink/50 transition-colors">
+                        <div class="w-12 h-12 rounded-xl bg-brand-pink/10 text-brand-pink flex items-center justify-center text-2xl font-bold">03</div>
+                        <h3 class="text-xl font-bold">Acompañamiento Directo</h3>
+                        <p class="text-slate-400 text-sm">Soporte directo por WhatsApp con Marta para adaptar ejercicios según tus lesiones, elementos o nivel actual.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 2: PLAN MENSUAL ================= -->
+        <section id="page-plan" class="hidden space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="text-xs font-bold text-brand-pink tracking-widest uppercase">PAGO SIMPLE Y SEGURO</span>
+                <h2 class="text-3xl sm:text-5xl font-black">MEMBRESÍA MENSUAL</h2>
+                <p class="text-slate-400">Sin contratos largos. Renová mes a mes con acceso total a toda la plataforma.</p>
+            </div>
+
+            <div class="max-w-xl mx-auto bg-brand-card rounded-3xl border-2 border-brand-pink p-8 sm:p-10 relative overflow-hidden pink-glow">
+                <div class="absolute top-0 right-0 bg-brand-pink text-white text-[10px] font-black px-4 py-1.5 rounded-bl-xl tracking-widest uppercase">
+                    ACCESO COMPLETO
+                </div>
+
+                <div class="space-y-6">
+                    <div class="border-b border-brand-border pb-6">
+                        <h3 class="text-2xl font-bold">Pase Full Alumna MARTA GIM</h3>
+                        <div class="flex items-baseline space-x-2 mt-4">
+                            <span class="text-4xl sm:text-5xl font-black text-white" id="displayPlanPrice">$15.000</span>
+                            <span class="text-slate-400 text-sm">/ mes (ARS)</span>
+                        </div>
+                        <p class="text-slate-400 text-xs mt-2">Abona por Transferencia Bancaria o Mercado Pago.</p>
+                    </div>
+
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-brand-pink"></i>
+                            <span>Rutinas grabadas nuevas de Lunes a Viernes</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-brand-pink"></i>
+                            <span>Acceso a la Biblioteca histórica de videos</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-brand-pink"></i>
+                            <span>Links directos a Clases En Vivo por Zoom/Meet</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-brand-pink"></i>
+                            <span>Soporte personalizado vía WhatsApp con Marta</span>
+                        </li>
+                    </ul>
+
+                    <div class="bg-slate-900/80 rounded-2xl p-4 border border-brand-border space-y-2 text-xs">
+                        <p class="font-bold text-brand-pink">PASOS PARA INSCRIBIRTE:</p>
+                        <ol class="list-decimal list-inside space-y-1 text-slate-300">
+                            <li>Creá tu cuenta en la opción <strong>"Registrarme"</strong>.</li>
+                            <li>Realizá la transferencia a los datos bancarios o por Mercado Pago.</li>
+                            <li>Envía el comprobante por WhatsApp a Marta.</li>
+                            <li>Marta activará tu membresía de inmediato.</li>
+                        </ol>
+                    </div>
+
+                    <div class="pt-2 space-y-3">
+                        <button onclick="navigateTo('auth', 'register')" class="w-full py-4 rounded-xl gradient-pink font-bold text-white text-center block shadow-lg hover:opacity-95 transition-all">
+                            1. Crear Cuenta de Alumna
+                        </button>
+                        <a id="btnSendPaymentReceipt" href="#" target="_blank" class="w-full py-3.5 rounded-xl border border-green-500/50 hover:bg-green-500/10 text-green-400 font-semibold text-center flex items-center justify-center space-x-2 transition-all">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                            <span>2. Enviar Comprobante por WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 3: AUTH ================= -->
+        <section id="page-auth" class="hidden max-w-md mx-auto py-8">
+            <div class="bg-brand-card border border-brand-border rounded-3xl p-6 sm:p-8 space-y-6">
+                <div class="flex border-b border-brand-border pb-2 space-x-4">
+                    <button id="tabBtnLogin" onclick="switchAuthTab('login')" class="flex-1 pb-2 font-bold text-brand-pink border-b-2 border-brand-pink transition-all">
+                        Iniciar Sesión
+                    </button>
+                    <button id="tabBtnRegister" onclick="switchAuthTab('register')" class="flex-1 pb-2 font-bold text-slate-400 border-b-2 border-transparent transition-all">
+                        Registrarme
+                    </button>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Email</label>
+                        <input type="email" id="loginEmail" required placeholder="tuemail@ejemplo.com" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Contraseña</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                    </div>
+                    <button type="submit" class="w-full py-3.5 rounded-xl gradient-pink font-bold text-white shadow-lg hover:opacity-95 transition-all">
+                        Ingresar a la Plataforma
+                    </button>
+                </form>
+
+                <form id="registerForm" onsubmit="handleRegister(event)" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre Completo</label>
+                        <input type="text" id="regName" required placeholder="Ej: Camila Rodríguez" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Teléfono / WhatsApp</label>
+                        <input type="tel" id="regPhone" required placeholder="Ej: +54 9 11 1234 5678" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Email</label>
+                        <input type="email" id="regEmail" required placeholder="tuemail@ejemplo.com" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Contraseña</label>
+                        <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                    </div>
+                    <button type="submit" class="w-full py-3.5 rounded-xl gradient-pink font-bold text-white shadow-lg hover:opacity-95 transition-all">
+                        Crear mi Cuenta de Alumna
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 4: RUTINAS ================= -->
+        <section id="page-routines" class="hidden space-y-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border pb-6">
+                <div>
+                    <span class="text-xs font-bold text-brand-pink tracking-widest uppercase">ÁREA EXCLUSIVA DE ALUMNAS</span>
+                    <h2 class="text-3xl font-black">RUTINAS DE LA SEMANA</h2>
+                    <p class="text-slate-400 text-sm">Entrenamientos diarios subidos por Marta Giménez.</p>
+                </div>
+                <div class="bg-brand-card px-4 py-2 rounded-xl border border-brand-border text-xs flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-slate-300 font-semibold" id="routineWeekLabel">Semana Actual</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" id="dayTabsContainer">
+                <!-- Injected via JS -->
+            </div>
+
+            <div class="bg-brand-card border border-brand-border rounded-3xl p-6 lg:p-8 space-y-6">
+                <div id="routineVideoContainer" class="aspect-video w-full rounded-2xl overflow-hidden bg-slate-950 border border-brand-border relative flex items-center justify-center">
+                    <!-- Video player -->
+                </div>
+                <div class="space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 id="routineTitle" class="text-2xl font-bold text-white">Título de la Clase</h3>
+                        <span id="routineBadge" class="bg-brand-pink/20 text-brand-pink font-bold text-xs px-3 py-1 rounded-full border border-brand-pink/30">Día</span>
+                    </div>
+                    <p id="routineDescription" class="text-slate-300 text-sm leading-relaxed">Descripción de la rutina...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 5: BIBLIOTECA ================= -->
+        <section id="page-library" class="hidden space-y-8">
+            <div class="space-y-2">
+                <span class="text-xs font-bold text-brand-pink tracking-widest uppercase">HISTORIAL DE ENTRENAMIENTOS</span>
+                <h2 class="text-3xl font-black">BIBLIOTECA DE VIDEOS</h2>
+                <p class="text-slate-400 text-sm">Reviví o ponete al día con clases grabadas organizadas por semanas anteriores.</p>
+            </div>
+
+            <div id="libraryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- ================= PAGE 6: EN VIVO ================= -->
+        <section id="page-live" class="hidden space-y-8">
+            <div class="space-y-2">
+                <span class="text-xs font-bold text-brand-pink tracking-widest uppercase">CLASES VIRTUALES EN DIRECTO</span>
+                <h2 class="text-3xl font-black">CALENDARIO EN VIVO</h2>
+                <p class="text-slate-400 text-sm">Ingresá a nuestras sesiones en vivo para entrenar juntas y corregir posturas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-brand-card border-2 border-brand-pink/60 rounded-3xl p-8 space-y-6 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="relative flex h-3.5 w-3.5">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-red-500"></span>
+                            </span>
+                            <span class="font-bold text-red-400 text-xs tracking-wider uppercase">SALA DE TRANSMISIÓN EN VIVO</span>
+                        </div>
+                        <span id="livePlatformLabel" class="text-xs font-bold px-3 py-1 rounded-md bg-slate-800 border border-brand-border text-slate-300">ZOOM / MEET</span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 id="liveClassTitle" class="text-2xl sm:text-3xl font-black">Clase Especial En Vivo con Marta</h3>
+                        <p id="liveClassSchedule" class="text-brand-pink font-bold text-sm">Próxima sesión: Martes y Jueves - 19:00 hs (Arg)</p>
+                        <p id="liveClassDesc" class="text-slate-300 text-sm leading-relaxed">
+                            Asegurate de tener tus elementos a mano (mancuernas, colchoneta y banda elástica). ¡Te espero en la sala!
+                        </p>
+                    </div>
+
+                    <div class="pt-4">
+                        <a id="btnJoinLiveClass" href="#" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-xl gradient-pink font-bold text-white shadow-lg pink-glow hover:opacity-95 transition-all inline-flex items-center justify-center space-x-3">
+                            <i class="fa-solid fa-video text-lg"></i>
+                            <span>INGRESAR A LA CLASE EN VIVO NOW</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-3xl p-6 space-y-4">
+                    <h4 class="font-bold text-lg flex items-center space-x-2">
+                        <i class="fa-solid fa-calendar-days text-brand-pink"></i>
+                        <span>Horarios Fijos de En Vivo</span>
+                    </h4>
+                    <ul class="space-y-3 text-xs text-slate-300">
+                        <li class="p-3 bg-slate-900 rounded-xl border border-brand-border flex justify-between items-center">
+                            <span>Martes (Glúteos & Piernas)</span>
+                            <span class="font-bold text-brand-pink">19:00 hs</span>
+                        </li>
+                        <li class="p-3 bg-slate-900 rounded-xl border border-brand-border flex justify-between items-center">
+                            <span>Jueves (Full Body & Cardio)</span>
+                            <span class="font-bold text-brand-pink">19:00 hs</span>
+                        </li>
+                        <li class="p-3 bg-slate-900 rounded-xl border border-brand-border flex justify-between items-center">
+                            <span>Sábados (Flexibilidad & Mobility)</span>
+                            <span class="font-bold text-brand-pink">10:00 hs</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 7: CONTACTO ================= -->
+        <section id="page-contact" class="hidden space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="text-xs font-bold text-brand-pink tracking-widest uppercase">CONECTEMOS</span>
+                <h2 class="text-3xl sm:text-5xl font-black">CANALES DE CONTACTO</h2>
+                <p class="text-slate-400">¿Tenés dudas sobre la membresía o querés consultar a Marta? Escribinos por cualquiera de estas redes.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <a id="contactWhatsAppLink" href="#" target="_blank" class="bg-brand-card border border-brand-border hover:border-green-500/50 p-8 rounded-3xl text-center space-y-4 group transition-all">
+                    <div class="w-16 h-16 rounded-2xl bg-green-500/10 text-green-400 flex items-center justify-center text-3xl mx-auto group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl">WhatsApp Directo</h3>
+                        <p class="text-xs text-slate-400 mt-1">Soporte y envío de comprobantes de pago</p>
+                    </div>
+                    <span class="inline-block text-xs font-bold text-green-400 bg-green-500/10 px-3 py-1 rounded-full">Hablar con Marta</span>
+                </a>
+
+                <a id="contactInstagramLink" href="#" target="_blank" class="bg-brand-card border border-brand-border hover:border-brand-pink/50 p-8 rounded-3xl text-center space-y-4 group transition-all">
+                    <div class="w-16 h-16 rounded-2xl bg-brand-pink/10 text-brand-pink flex items-center justify-center text-3xl mx-auto group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl">Instagram</h3>
+                        <p class="text-xs text-slate-400 mt-1">Tips diarios, motivación y contenido gratuito</p>
+                    </div>
+                    <span class="inline-block text-xs font-bold text-brand-pink bg-brand-pink/10 px-3 py-1 rounded-full">@martagim.ok</span>
+                </a>
+
+                <a id="contactTikTokLink" href="#" target="_blank" class="bg-brand-card border border-brand-border hover:border-slate-400 p-8 rounded-3xl text-center space-y-4 group transition-all">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-800 text-white flex items-center justify-center text-3xl mx-auto group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl">TikTok</h3>
+                        <p class="text-xs text-slate-400 mt-1">Videos cortos, rutinas express y desafíos</p>
+                    </div>
+                    <span class="inline-block text-xs font-bold text-slate-300 bg-slate-800 px-3 py-1 rounded-full">@martagim.fit</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 8: PANEL ADMIN ================= -->
+        <section id="page-admin" class="hidden space-y-12">
+            <div class="border-b border-brand-border pb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <span class="text-xs font-bold text-brand-pink tracking-widest uppercase">CONTROL TOTAL</span>
+                    <h2 class="text-3xl font-black">PANEL DE ADMINISTRACIÓN - MARTA GIM</h2>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-brand-pink/20 text-brand-pink text-xs font-bold border border-brand-pink/30">
+                    Súper Administrador
+                </span>
+            </div>
+
+            <div class="flex flex-wrap gap-3 border-b border-brand-border pb-4">
+                <button onclick="switchAdminTab('users')" id="adminTabUsers" class="px-4 py-2 rounded-xl bg-brand-pink font-bold text-sm text-white transition-all">
+                    👥 Alumnas y Membresías
+                </button>
+                <button onclick="switchAdminTab('content')" id="adminTabContent" class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border hover:border-brand-pink font-bold text-sm text-slate-300 transition-all">
+                    📹 Subir Videos y Rutinas
+                </button>
+                <button onclick="switchAdminTab('settings')" id="adminTabSettings" class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border hover:border-brand-pink font-bold text-sm text-slate-300 transition-all">
+                    ⚙️ Configurar Precios y Enlaces
+                </button>
+            </div>
+
+            <div id="adminSectionUsers" class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-bold">Gestión de Alumnas Registradas</h3>
+                    <span class="text-xs text-slate-400">Podés confirmar o revocar membresías manualmente.</span>
+                </div>
+
+                <div class="overflow-x-auto bg-brand-card rounded-2xl border border-brand-border">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 border-b border-brand-border">
+                            <tr>
+                                <th class="p-4">Alumna</th>
+                                <th class="p-4">Contacto</th>
+                                <th class="p-4">Estado Membresía</th>
+                                <th class="p-4">Vencimiento</th>
+                                <th class="p-4 text-right">Acciones de Pago</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUsersTableBody" class="divide-y divide-brand-border">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="adminSectionContent" class="hidden space-y-6 max-w-3xl">
+                <h3 class="text-xl font-bold">Publicar Nueva Rutina o Video</h3>
+                <form onsubmit="handleAdminUploadRoutine(event)" class="bg-brand-card p-6 rounded-2xl border border-brand-border space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Día de la semana</label>
+                            <select id="adminRoutineDay" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                                <option value="lunes">Lunes - Glúteos e Isquios</option>
+                                <option value="martes">Martes - Espalda y Hombros</option>
+                                <option value="miercoles">Miércoles - Cuádriceps y Abdomen</option>
+                                <option value="jueves">Jueves - Pecho, Tríceps y Cardio</option>
+                                <option value="viernes">Viernes - Full Body Metabólico</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Semana del Año / Título</label>
+                            <input type="text" id="adminRoutineWeek" required placeholder="Ej: Semana 12 - Alta Intensidad" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Título de la Clase</label>
+                        <input type="text" id="adminRoutineTitle" required placeholder="Ej: Glúteos de Acero con Mancuernas" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Enlace del Video (YouTube Embed o URL)</label>
+                        <input type="url" id="adminRoutineUrl" required placeholder="Ej: https://www.youtube.com/embed/dQw4w9WgXcQ" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Descripción y Detalles del Entrenamiento</label>
+                        <textarea id="adminRoutineDesc" rows="3" required placeholder="Ej: 4 series de 12 repeticiones de Hip Thrust..." class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3.5 rounded-xl gradient-pink font-bold text-white shadow-lg hover:opacity-95 transition-all">
+                        Publicar Clases en el Área Privada
+                    </button>
+                </form>
+            </div>
+
+            <div id="adminSectionSettings" class="hidden space-y-6 max-w-3xl">
+                <h3 class="text-xl font-bold">Editar Ajustes y Datos Editables</h3>
+                <form onsubmit="handleAdminSaveSettings(event)" class="bg-brand-card p-6 rounded-2xl border border-brand-border space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Precio Membresía (ARS)</label>
+                            <input type="text" id="settingPrice" required class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Número de WhatsApp</label>
+                            <input type="text" id="settingWhatsApp" required placeholder="5491112345678" class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Usuario Instagram</label>
+                            <input type="text" id="settingInstagram" required class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Usuario TikTok</label>
+                            <input type="text" id="settingTikTok" required class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Enlace de Clase En Vivo</label>
+                        <input type="url" id="settingLiveUrl" required class="w-full bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm focus:outline-none pink-border-glow">
+                    </div>
+                    <button type="submit" class="w-full py-3.5 rounded-xl gradient-pink font-bold text-white shadow-lg hover:opacity-95 transition-all">
+                        Guardar Cambios Configurados
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CUSTOM MESSAGE MODAL -->
+    <div id="customModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-brand-card border-2 border-brand-pink rounded-3xl p-6 max-w-md w-full space-y-4 text-center">
+            <div id="modalIcon" class="text-4xl text-brand-pink">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <h3 id="modalTitle" class="text-xl font-bold">Mensaje</h3>
+            <p id="modalMessage" class="text-sm text-slate-300 leading-relaxed"></p>
+            <button onclick="closeModal()" class="w-full py-3 rounded-xl gradient-pink font-bold text-white shadow-lg">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-black border-t border-brand-border mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-center sm:text-left">
+                <p class="font-black text-lg">MARTA<span class="text-brand-pink">.</span>GIM</p>
+                <p class="text-xs text-slate-500">DISCIPLINA · FUERZA · LIBERTAD &copy; 2026. Todos los derechos reservados.</p>
+            </div>
+            <div class="flex items-center space-x-4 text-lg text-slate-400">
+                <a id="footerWa" href="#" target="_blank" class="hover:text-green-400 transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                <a id="footerIg" href="#" target="_blank" class="hover:text-brand-pink transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a id="footerTt" href="#" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const DEFAULT_SETTINGS = {
+            price: "$15.000",
+            whatsapp: "5491112345678",
+            instagram: "martagim.ok",
+            tiktok: "martagim.fit",
+            liveUrl: "https://zoom.us/j/123456789"
+        };
+
+        const DEFAULT_USERS = [
+            { id: '1', name: 'Marta Giménez', email: 'marta@martagim.com', role: 'admin', active: true, expires: '2099-12-31' },
+            { id: '2', name: 'Sofia Martínez', email: 'sofia@gmail.com', role: 'student', active: true, expires: '2026-11-30' },
+            { id: '3', name: 'Lucía Fernández', email: 'lucia@gmail.com', role: 'student', active: false, expires: '2026-09-01' }
+        ];
+
+        const DEFAULT_ROUTINES = {
+            lunes: { day: 'Lunes', area: 'Glúteos e Isquios', week: 'Semana Actual', title: 'Aumento de Glúteos e Isquios con Carga', desc: '4 series x 12 Hip Thrust + 4 series RDL Sumo. RPE 8.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            martes: { day: 'Martes', area: 'Espalda y Hombros', week: 'Semana Actual', title: 'Postura y Torso Esculpido', desc: 'Dominadas asistidas, remo con barra y vuelos laterales.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            miercoles: { day: 'Miércoles', area: 'Cuádriceps y Abdomen', week: 'Semana Actual', title: 'Cuádriceps de Hierro & Core', desc: 'Sentadilla profunda, estocadas búlgaras y circuito de core.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            jueves: { day: 'Jueves', area: 'Pecho, Tríceps y Cardio', week: 'Semana Actual', title: 'Empuje y HIIT Quema Grasa', desc: 'Push-ups, fondos y metabólico de 15 minutos sin parar.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            viernes: { day: 'Viernes', area: 'Full Body Metabólico', week: 'Semana Actual', title: 'Full Body & Movilidad', desc: 'Combinación de fuerza completa para cerrar la semana con energía.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
+        };
+
+        const DEFAULT_LIBRARY = [
+            { week: 'Semana 10', title: 'Especial Glúteos & Tono', date: 'Octubre 2026', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            { week: 'Semana 09', title: 'Desafío Hipertrofia Inferior', date: 'Octubre 2026', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            { week: 'Semana 08', title: 'Cardio HIIT & Abdomen', date: 'Septiembre 2026', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
+        ];
+
+        let appState = {
+            currentUser: JSON.parse(localStorage.getItem('martaGimUser')) || null,
+            settings: JSON.parse(localStorage.getItem('martaGimSettings')) || DEFAULT_SETTINGS,
+            users: JSON.parse(localStorage.getItem('martaGimUsersList')) || DEFAULT_USERS,
+            routines: JSON.parse(localStorage.getItem('martaGimRoutines')) || DEFAULT_ROUTINES,
+            library: JSON.parse(localStorage.getItem('martaGimLibrary')) || DEFAULT_LIBRARY,
+            selectedDay: 'lunes'
+        };
+
+        window.onload = function() {
+            saveState();
+            renderSettingsUI();
+            updateAuthNav();
+            renderRoutinesDayTabs();
+            renderSelectedRoutine();
+            renderLibrary();
+            renderAdminUsers();
+            navigateTo('home');
+        };
+
+        function saveState() {
+            localStorage.setItem('martaGimSettings', JSON.stringify(appState.settings));
+            localStorage.setItem('martaGimUsersList', JSON.stringify(appState.users));
+            localStorage.setItem('martaGimRoutines', JSON.stringify(appState.routines));
+            localStorage.setItem('martaGimLibrary', JSON.stringify(appState.library));
+            if (appState.currentUser) {
+                localStorage.setItem('martaGimUser', JSON.stringify(appState.currentUser));
+            } else {
+                localStorage.removeItem('martaGimUser');
+            }
+        }
+
+        function navigateTo(pageId, extraParam = null) {
+            const pages = ['home', 'plan', 'auth', 'routines', 'library', 'live', 'contact', 'admin'];
+            pages.forEach(p => {
+                const el = document.getElementById(`page-${p}`);
+                if (el) el.classList.add('hidden');
+            });
+
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) targetPage.classList.remove('hidden');
+
+            if (pageId === 'auth' && extraParam) {
+                switchAuthTab(extraParam);
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function checkAccessAndNavigate(pageId) {
+            if (!appState.currentUser) {
+                showModal('Acceso Restringido', 'Debés iniciar sesión o registrarte para acceder a las clases privadas de MARTA GIM.');
+                navigateTo('auth', 'login');
+                return;
+            }
+
+            if (appState.currentUser.role !== 'admin' && !appState.currentUser.active) {
+                showModal('Membresía Pendiente o Vencida', 'Tu membresía no se encuentra activa. Para reactivarla, realizá el pago del plan mensual y envía el comprobante por WhatsApp.');
+                navigateTo('plan');
+                return;
+            }
+
+            navigateTo(pageId);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function renderSettingsUI() {
+            document.getElementById('displayPlanPrice').innerText = appState.settings.price;
+            
+            const waUrl = `https://wa.me/${appState.settings.whatsapp}?text=Hola%20Marta!%20Quiero%20activar%20mi%20membresía%20en%20MARTA%20GIM.`;
+            const igUrl = `https://instagram.com/${appState.settings.instagram}`;
+            const ttUrl = `https://tiktok.com/@${appState.settings.tiktok}`;
+
+            document.getElementById('btnSendPaymentReceipt').href = waUrl;
+            document.getElementById('contactWhatsAppLink').href = waUrl;
+            document.getElementById('contactInstagramLink').href = igUrl;
+            document.getElementById('contactTikTokLink').href = ttUrl;
+            document.getElementById('btnJoinLiveClass').href = appState.settings.liveUrl;
+
+            document.getElementById('footerWa').href = waUrl;
+            document.getElementById('footerIg').href = igUrl;
+            document.getElementById('footerTt').href = ttUrl;
+
+            document.getElementById('settingPrice').value = appState.settings.price;
+            document.getElementById('settingWhatsApp').value = appState.settings.whatsapp;
+            document.getElementById('settingInstagram').value = appState.settings.instagram;
+            document.getElementById('settingTikTok').value = appState.settings.tiktok;
+            document.getElementById('settingLiveUrl').value = appState.settings.liveUrl;
+        }
+
+        function updateAuthNav() {
+            const nav = document.getElementById('authNavButtons');
+            const mobNav = document.getElementById('mobileAuthNav');
+
+            if (appState.currentUser) {
+                const isAdmin = appState.currentUser.role === 'admin';
+                const statusBadge = appState.currentUser.active 
+                    ? '<span class="text-[10px] bg-green-500/20 text-green-400 font-bold px-2 py-0.5 rounded-full border border-green-500/30">ACTIVA</span>'
+                    : '<span class="text-[10px] bg-red-500/20 text-red-400 font-bold px-2 py-0.5 rounded-full border border-red-500/30">INACTIVA</span>';
+
+                nav.innerHTML = `
+                    ${isAdmin ? `
+                        <button onclick="navigateTo('admin')" class="px-3.5 py-2 rounded-xl bg-brand-pink/20 text-brand-pink border border-brand-pink/30 font-bold text-xs hover:bg-brand-pink hover:text-white transition-all">
+                            <i class="fa-solid fa-user-gear mr-1"></i> Panel Admin
+                        </button>
+                    ` : ''}
+                    <div class="flex items-center space-x-2 bg-brand-card border border-brand-border px-3 py-1.5 rounded-xl">
+                        <i class="fa-solid fa-circle-user text-brand-pink"></i>
+                        <span class="text-xs font-semibold">${appState.currentUser.name}</span>
+                        ${statusBadge}
+                    </div>
+                    <button onclick="handleLogout()" class="text-xs text-slate-400 hover:text-red-400 font-medium">Salir</button>
+                `;
+
+                mobNav.innerHTML = `
+                    <div class="px-3 py-2 text-xs text-slate-300">Hola, <strong>${appState.currentUser.name}</strong> (${appState.currentUser.active ? 'Membresía Activa' : 'Inactiva'})</div>
+                    ${isAdmin ? `<button onclick="navigateTo('admin'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 text-brand-pink font-bold rounded hover:bg-slate-800">Panel de Administración</button>` : ''}
+                    <button onclick="handleLogout(); toggleMobileMenu()" class="block w-full text-left py-2 px-3 text-red-400 rounded hover:bg-slate-800">Cerrar Sesión</button>
+                `;
+            } else {
+                nav.innerHTML = `
+                    <button onclick="navigateTo('auth', 'login')" class="text-xs font-semibold hover:text-brand-pink transition-colors">Ingresar</button>
+                    <button onclick="navigateTo('auth', 'register')" class="px-4 py-2 rounded-xl gradient-pink font-bold text-xs text-white shadow hover:opacity-95 transition-all">
+                        Registrarme
+                    </button>
+                `;
+
+                mobNav.innerHTML = `
+                    <button onclick="navigateTo('auth', 'login'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-800">Ingresar</button>
+                    <button onclick="navigateTo('auth', 'register'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 text-brand-pink font-bold rounded hover:bg-slate-800">Registrarme</button>
+                `;
+            }
+        }
+
+        function switchAuthTab(type) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const btnLogin = document.getElementById('tabBtnLogin');
+            const btnReg = document.getElementById('tabBtnRegister');
+
+            if (type === 'login') {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                btnLogin.className = "flex-1 pb-2 font-bold text-brand-pink border-b-2 border-brand-pink transition-all";
+                btnReg.className = "flex-1 pb-2 font-bold text-slate-400 border-b-2 border-transparent transition-all";
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                btnReg.className = "flex-1 pb-2 font-bold text-brand-pink border-b-2 border-brand-pink transition-all";
+                btnLogin.className = "flex-1 pb-2 font-bold text-slate-400 border-b-2 border-transparent transition-all";
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const foundUser = appState.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+            if (foundUser) {
+                appState.currentUser = foundUser;
+                saveState();
+                updateAuthNav();
+                showModal('¡Bienvenida!', `Ingresaste correctamente como ${foundUser.name}.`);
+                
+                if (foundUser.role === 'admin') {
+                    navigateTo('admin');
+                } else if (foundUser.active) {
+                    navigateTo('routines');
+                } else {
+                    navigateTo('plan');
+                }
+            } else {
+                showModal('Error de Ingreso', 'No se encontró ninguna cuenta registrada con este correo electrónico.');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+
+            const exists = appState.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+            if (exists) {
+                showModal('Usuario Existente', 'Este correo ya se encuentra registrado. Iniciá sesión.');
+                switchAuthTab('login');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now().toString(),
+                name: name,
+                phone: phone,
+                email: email,
+                role: 'student',
+                active: false,
+                expires: 'Pendiente'
+            };
+
+            appState.users.push(newUser);
+            appState.currentUser = newUser;
+            saveState();
+            updateAuthNav();
+            renderAdminUsers();
+
+            showModal('¡Registro Exitoso!', 'Tu cuenta ha sido creada. Realizá la transferencia del plan mensual y enviá el comprobante a Marta por WhatsApp para activar tu acceso.');
+            navigateTo('plan');
+        }
+
+        function handleLogout() {
+            appState.currentUser = null;
+            saveState();
+            updateAuthNav();
+            showModal('Sesión Cerrada', 'Has salido de tu cuenta correctamente.');
+            navigateTo('home');
+        }
+
+        function renderRoutinesDayTabs() {
+            const container = document.getElementById('dayTabsContainer');
+            const days = [
+                { id: 'lunes', name: 'Lunes', area: 'Glúteos & Isquios' },
+                { id: 'martes', name: 'Martes', area: 'Espalda & Hombros' },
+                { id: 'miercoles', name: 'Miércoles', area: 'Cuádriceps & Core' },
+                { id: 'jueves', name: 'Jueves', area: 'Cardio & Tríceps' },
+                { id: 'viernes', name: 'Viernes', area: 'Full Body' }
+            ];
+
+            container.innerHTML = days.map(d => {
+                const isSelected = appState.selectedDay === d.id;
+                return `
+                    <button onclick="selectRoutineDay('${d.id}')" 
+                        class="p-3 rounded-2xl border transition-all text-left ${isSelected ? 'bg-brand-pink text-white border-brand-pink shadow-lg' : 'bg-brand-card text-slate-400 border-brand-border hover:border-brand-pink/40'}">
+                        <p class="text-xs font-bold uppercase ${isSelected ? 'text-white' : 'text-slate-300'}">${d.name}</p>
+                        <p class="text-[11px] truncate opacity-90">${d.area}</p>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectRoutineDay(dayKey) {
+            appState.selectedDay = dayKey;
+            renderRoutinesDayTabs();
+            renderSelectedRoutine();
+        }
+
+        function renderSelectedRoutine() {
+            const current = appState.routines[appState.selectedDay];
+            if (!current) return;
+
+            document.getElementById('routineWeekLabel').innerText = current.week || 'Semana Actual';
+            document.getElementById('routineTitle').innerText = current.title;
+            document.getElementById('routineBadge').innerText = `${current.day} · ${current.area}`;
+            document.getElementById('routineDescription').innerText = current.desc;
+
+            const videoContainer = document.getElementById('routineVideoContainer');
+            
+            if (current.videoUrl.includes('youtube.com') || current.videoUrl.includes('youtu.be')) {
+                videoContainer.innerHTML = `<iframe class="w-full h-full" src="${current.videoUrl}" title="${current.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            } else {
+                videoContainer.innerHTML = `
+                    <div class="text-center p-6">
+                        <i class="fa-solid fa-circle-play text-5xl text-brand-pink mb-3"></i>
+                        <p class="font-bold text-lg">${current.title}</p>
+                        <a href="${current.videoUrl}" target="_blank" class="inline-block mt-3 px-6 py-2.5 rounded-xl gradient-pink font-bold text-xs text-white">Ver Clase Externa</a>
+                    </div>
+                `;
+            }
+        }
+
+        function renderLibrary() {
+            const grid = document.getElementById('libraryGrid');
+            grid.innerHTML = appState.library.map(item => `
+                <div class="bg-brand-card rounded-2xl border border-brand-border p-5 space-y-4 hover:border-brand-pink/40 transition-all flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-brand-pink bg-brand-pink/10 px-2.5 py-1 rounded-md border border-brand-pink/20">${item.week}</span>
+                            <span class="text-slate-500">${item.date}</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-white">${item.title}</h3>
+                    </div>
+                    <button onclick="playLibraryVideo('${item.videoUrl}', '${item.title}')" class="w-full py-2.5 rounded-xl border border-brand-border hover:bg-brand-pink hover:border-brand-pink font-semibold text-xs transition-all flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Reproducir Clase</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function playLibraryVideo(url, title) {
+            checkAccessAndNavigate('routines');
+            const videoContainer = document.getElementById('routineVideoContainer');
+            document.getElementById('routineTitle').innerText = title;
+            document.getElementById('routineBadge').innerText = "Biblioteca Grabada";
+            document.getElementById('routineDescription').innerText = "Clase archivada reproducida desde la biblioteca de MARTA GIM.";
+            videoContainer.innerHTML = `<iframe class="w-full h-full" src="${url}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        }
+
+        function switchAdminTab(tab) {
+            const secUsers = document.getElementById('adminSectionUsers');
+            const secContent = document.getElementById('adminSectionContent');
+            const secSettings = document.getElementById('adminSectionSettings');
+
+            const btnUsers = document.getElementById('adminTabUsers');
+            const btnContent = document.getElementById('adminTabContent');
+            const btnSettings = document.getElementById('adminTabSettings');
+
+            secUsers.classList.add('hidden');
+            secContent.classList.add('hidden');
+            secSettings.classList.add('hidden');
+
+            const defaultBtnClass = "px-4 py-2 rounded-xl bg-brand-card border border-brand-border hover:border-brand-pink font-bold text-sm text-slate-300 transition-all";
+            const activeBtnClass = "px-4 py-2 rounded-xl bg-brand-pink font-bold text-sm text-white transition-all";
+
+            btnUsers.className = defaultBtnClass;
+            btnContent.className = defaultBtnClass;
+            btnSettings.className = defaultBtnClass;
+
+            if (tab === 'users') {
+                secUsers.classList.remove('hidden');
+                btnUsers.className = activeBtnClass;
+            } else if (tab === 'content') {
+                secContent.classList.remove('hidden');
+                btnContent.className = activeBtnClass;
+            } else if (tab === 'settings') {
+                secSettings.classList.remove('hidden');
+                btnSettings.className = activeBtnClass;
+            }
+        }
+
+        function renderAdminUsers() {
+            const tbody = document.getElementById('adminUsersTableBody');
+            tbody.innerHTML = appState.users.map(u => `
+                <tr class="hover:bg-slate-900/50 transition-colors">
+                    <td class="p-4 font-semibold text-white">
+                        ${u.name}
+                        ${u.role === 'admin' ? '<span class="text-[10px] bg-brand-pink text-white px-2 py-0.5 rounded ml-2 font-bold">ADMIN</span>' : ''}
+                    </td>
+                    <td class="p-4 text-slate-300 text-xs">
+                        <div>${u.email}</div>
+                        <div class="text-slate-500">${u.phone || 'Sin WhatsApp'}</div>
+                    </td>
+                    <td class="p-4">
+                        ${u.active 
+                            ? '<span class="text-xs bg-green-500/20 text-green-400 font-bold px-2.5 py-1 rounded-full border border-green-500/30">Habilitada</span>'
+                            : '<span class="text-xs bg-red-500/20 text-red-400 font-bold px-2.5 py-1 rounded-full border border-red-500/30">Pendiente / Vencida</span>'}
+                    </td>
+                    <td class="p-4 text-xs text-slate-400">${u.expires || 'N/A'}</td>
+                    <td class="p-4 text-right space-x-2">
+                        ${u.role !== 'admin' ? `
+                            <button onclick="toggleUserStatus('${u.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${u.active ? 'bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white' : 'bg-green-500/20 text-green-400 hover:bg-green-500 hover:text-white'}">
+                                ${u.active ? 'Revocar Acceso' : 'Confirmar Pago & Activar'}
+                            </button>
+                        ` : '<span class="text-xs text-slate-500">N/A</span>'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function toggleUserStatus(userId) {
+            const user = appState.users.find(u => u.id === userId);
+            if (user) {
+                user.active = !user.active;
+                user.expires = user.active ? '2026-12-31' : 'Vencida';
+                saveState();
+                renderAdminUsers();
+                updateAuthNav();
+                showModal('Membresía Actualizada', `Se ha ${user.active ? 'ACTIVADO' : 'REVOCADO'} el acceso a ${user.name}.`);
+            }
+        }
+
+        function handleAdminUploadRoutine(e) {
+            e.preventDefault();
+            const day = document.getElementById('adminRoutineDay').value;
+            const week = document.getElementById('adminRoutineWeek').value.trim();
+            const title = document.getElementById('adminRoutineTitle').value.trim();
+            const url = document.getElementById('adminRoutineUrl').value.trim();
+            const desc = document.getElementById('adminRoutineDesc').value.trim();
+
+            appState.routines[day] = {
+                day: day.charAt(0).toUpperCase() + day.slice(1),
+                area: appState.routines[day].area,
+                week: week,
+                title: title,
+                videoUrl: url,
+                desc: desc
+            };
+
+            appState.library.unshift({
+                week: week,
+                title: title,
+                date: 'Actualizado Recientemente',
+                videoUrl: url
+            });
+
+            saveState();
+            renderSelectedRoutine();
+            renderLibrary();
+
+            showModal('¡Rutina Publicada!', `La clase para el día ${day.toUpperCase()} se ha actualizado correctamente en el área privada.`);
+            navigateTo('routines');
+        }
+
+        function handleAdminSaveSettings(e) {
+            e.preventDefault();
+            appState.settings.price = document.getElementById('settingPrice').value.trim();
+            appState.settings.whatsapp = document.getElementById('settingWhatsApp').value.trim();
+            appState.settings.instagram = document.getElementById('settingInstagram').value.trim();
+            appState.settings.tiktok = document.getElementById('settingTikTok').value.trim();
+            appState.settings.liveUrl = document.getElementById('settingLiveUrl').value.trim();
+
+            saveState();
+            renderSettingsUI();
+            showModal('Configuración Guardada', 'Todos los precios, enlaces y contactos han sido actualizados en la plataforma.');
+        }
+
+        function showModal(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = text;
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        function closeNotification() {
+            document.getElementById('globalNotification').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
